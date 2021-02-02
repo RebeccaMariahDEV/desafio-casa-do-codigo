@@ -108,17 +108,17 @@ public class LivroController extends BaseController {
         return ResponseEntity.ok().body(listaLivros);
     }
 
-    @GetMapping(value = "/livroDetalhado{id}")
-    @Cacheable //guarda o resultado em memoria
-    public Page<LivroDto> livroDetalhado(@RequestParam(required = false) String titulo, @PageableDefault(sort = "id",
-    direction = Sort.Direction.DESC, page = 0, size = 10) Pageable paginacao){
+ //   @GetMapping(value = "/livroDetalhado{id}")
+//    @Cacheable //guarda o resultado em memoria
+//    public Page<LivroDto> livroDetalhado(@RequestParam(required = false) String titulo, @PageableDefault(sort = "id",
+//    direction = Sort.Direction.DESC, page = 0, size = 10) Pageable paginacao){
 
-        if (titulo ==null) {
+//        if (titulo ==null) {
             //consulta e mostra todos os dados do banco de dados, herdando as funcionalidades do jpa
-            Page<LivroDto> livroDetalhado = livroRepository.findByTitulo();
-            return Livro;
-        }
-        return new ;
-    }
+//            Page<LivroDto> livroDetalhado = livroRepository.findByTitulo();
+//            return Livro;
+ //       }
+ //       return new ;
+ //   }
 
 }
