@@ -8,7 +8,6 @@ import br.com.zup.desafioCasaCodigo.model.Pais;
 import br.com.zup.desafioCasaCodigo.repository.EstadoRepository;
 import br.com.zup.desafioCasaCodigo.repository.FluxoPagametoRepository;
 import br.com.zup.desafioCasaCodigo.repository.PaisRepository;
-import org.hibernate.query.criteria.internal.expression.function.AggregationFunction;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -26,6 +25,7 @@ public class FluxoPagamentoController {
     FluxoPagametoRepository fluxoPagametoRepository;
     PaisRepository paisRepository;
     EstadoRepository estadoRepository;
+
 
     @Autowired
     public FluxoPagamentoController(FluxoPagametoRepository fluxoPagametoRepository, PaisRepository paisRepository,
@@ -46,9 +46,15 @@ public class FluxoPagamentoController {
         //busca o estado por id
         Optional<Estados> estados = estadoRepository.findById(fluxoPagamentoDto.getEstados_id());
 
+//        Optional<TipoDocumento> tipoDocumento = tipoDocumentoRepository.findByDescricao(fluxoPagamento.getTipoDocumento().g());
+
         fluxoPagamento.setDadosPessoais(fluxoPagamentoDto.getNome(), fluxoPagamentoDto.getSobrenome(), fluxoPagamentoDto.getEmail(),
                 fluxoPagamentoDto.getDocumento(), fluxoPagamentoDto.getEndereco(), fluxoPagamentoDto.getComplementar(),
-                fluxoPagamentoDto.getCidade(), pais.get(), estados.get(), fluxoPagamentoDto.getTelefone(), fluxoPagamentoDto.getCep());
+                fluxoPagamentoDto.getCidade(), pais.get(), estados.get(), fluxoPagamentoDto.getTelefone(), fluxoPagamentoDto.getCep(),
+                fluxoPagamentoDto.getTipoDocumento());
+
+        // System.out.println(fluxoPagamento.getTipoDocumento());
+
 
         //validar estado
 //        var findEstado = estadoRepository.findByEstado(estados.get().getEstado());
@@ -57,19 +63,21 @@ public class FluxoPagamentoController {
 //            if ()
 //        }
 
-        //validando pais estado
-//        var findPais = paisRepository.findByPais(pais.get().getPais());
-//        var findEstado = estadoRepository.findByEstado(estados.get().getEstado());
-//        if (findEstado.isPresent() && !findPais.isPresent()){
-//            throw new ColunaErro("Estado já existe, selecione um pais", "pais");
-//        }
-//        else if(){
-//            throw new ColunaErro("Pais já existente, selecione um estado", "estado");
-//        }
+ //       validando pais estado
+        var findPais = paisRepository.findByPais(pais.get().getPais());
+        var findEstado = estadoRepository.findByEstado(estados.get().getEstado());
+        if (findEstado.isPresent() && !findPais.isPresent()){
+            throw new ColunaErro("Estado já existe, selecione um pais", "pais");
+        }
+        else if(!findEstado.isPresent() && findPais.isPresent()){
+            throw new ColunaErro("Pais já existente, selecione um estado", "estado");
+        }
+
+
 
         fluxoPagametoRepository.save(fluxoPagamento);
 
-        return  null;
+        return  ResponseEntity.ok().build();
 
     }
 

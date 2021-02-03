@@ -2,12 +2,14 @@ package br.com.zup.desafioCasaCodigo.dto;
 
 import br.com.zup.desafioCasaCodigo.model.Estados;
 import br.com.zup.desafioCasaCodigo.model.Pais;
+import br.com.zup.desafioCasaCodigo.model.TipoDocumento;
 import org.hibernate.validator.constraints.br.CNPJ;
 import org.hibernate.validator.constraints.br.CPF;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 public class FluxoPagamentoDto {
 
@@ -23,6 +25,10 @@ public class FluxoPagamentoDto {
     @NotBlank
     private String sobrenome;
 
+    @NotNull
+    private TipoDocumento tipoDocumento;
+
+    @NotBlank
     private String documento;
 
     @NotBlank
@@ -126,6 +132,14 @@ public class FluxoPagamentoDto {
 
     public String getCep() {
         return cep;
+    }
+
+    public TipoDocumento getTipoDocumento() {
+        return tipoDocumento;
+    }
+
+    public void setTipoDocumento(TipoDocumento tipoDocumento) {
+        this.tipoDocumento = tipoDocumento;
     }
 
     public void setCep(String cep) {

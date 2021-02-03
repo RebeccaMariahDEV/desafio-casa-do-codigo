@@ -1,17 +1,25 @@
 package br.com.zup.desafioCasaCodigo.model;
 
+import br.com.zup.desafioCasaCodigo.repository.CnpjGoup;
+import br.com.zup.desafioCasaCodigo.repository.CpfGoup;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 import org.hibernate.validator.constraints.br.CNPJ;
 import org.hibernate.validator.constraints.br.CPF;
+import org.hibernate.validator.group.GroupSequenceProvider;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import java.io.Serializable;
 import java.sql.Timestamp;
 
 @Entity
-public class FluxoPagamento {
+@GroupSequenceProvider(FluxoPagamentGroupSequenceProvider.class)
+public class FluxoPagamento implements Serializable {
+
+    private static final long serialVersionUID = 1L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -27,7 +35,14 @@ public class FluxoPagamento {
     @NotBlank
     private String sobrenome;
 
-    @CPF
+    @NotNull
+    @Enumerated(EnumType.STRING)
+    private TipoDocumento tipoDocumento;
+
+    @NotBlank
+    @CPF(groups = CpfGoup.class)
+    @CNPJ(groups = CnpjGoup.class)
+    @Column(name = "cpf_cnpj", unique = true)
     private String documento;
 
     @NotBlank
@@ -115,10 +130,13 @@ public class FluxoPagamento {
         return atualizadoEm;
     }
 
+    public TipoDocumento getTipoDocumento() {
+        return tipoDocumento;
+    }
 
     public void setDadosPessoais(String nome, String sobrenome, String email, String documento,
                                  String endereco, String complementar, String cidade, Pais pais,
-                                 Estados estados, String telefone, String cep){
+                                 Estados estados, String telefone, String cep, TipoDocumento tipoDocumento){
 
         this.nome = nome;
         this.sobrenome = sobrenome;
@@ -131,6 +149,7 @@ public class FluxoPagamento {
         this.estados = estados;
         this.telefone = telefone;
         this.cep = cep;
+        this.tipoDocumento = tipoDocumento;
 
     }
 }
